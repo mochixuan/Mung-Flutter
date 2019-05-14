@@ -1,13 +1,15 @@
-import 'package:banner/banner.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:mung_flutter/bloc/theme_bloc.dart';
+import 'package:mung_flutter/style/colors.dart';
 import 'package:mung_flutter/utils/route_util.dart';
 import 'package:mung_flutter/utils/ui_util.dart';
-import 'package:mung_flutter/style/colors.dart';
 
 class MainPage extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
+
     // 有个时间差，就是执行顺序问题
     ThemeBloc _themeBloc = ThemeBloc();
     return ThemeProvider(
@@ -19,7 +21,7 @@ class MainPage extends StatelessWidget {
                 debugShowCheckedModeBanner: false,
                 theme: ThemeData(
                   primaryColor: Color(_themeBloc.themeColor), // 主题色
-                  backgroundColor: WColors.bgColor,
+                  backgroundColor: WColors.color_f5,
                 ),
                 // 加Builder的原因是跳转时传递的context系统内部回去一直向上获取MaterialAPP,而这里如果不写context就拿不到MaterialApp的context了
                 home: Builder(
@@ -27,35 +29,11 @@ class MainPage extends StatelessWidget {
                       return Scaffold(
                         appBar: AppBar(
                           leading: UiUtil.getIconFontButton(0xeaec,() => RouteUtil.routeToThemePage(context)),
-                          title: Text("Mung",style: TextStyle(color: WColors.white),),
+                          title: Text("Mung",style: TextStyle(color: WColors.color_ff),),
                           centerTitle: true,
                           actions: <Widget>[ UiUtil.getIconFontButton(0xeafe,(){}) ],
                         ),
-                        body: BannerView(
-                          data: [
-                            111111111111111,
-                            222222222222222,
-                            333333333333333,
-                            444444444444444
-                          ],
-                          delayTime: 5,
-                          buildShowView: (index,item){
-                            return Container(
-                              width: 100,
-                              height: 100,
-                              child: new Text(item.toString()),
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Colors.red,
-                                    width: 10,
-                                  )
-                              ),
-                            );
-                          },
-                          onBannerClickListener: (index,item){
-
-                          },
-                        ),
+                        body: _BannerWidget(),
                       );
                     }
                 )
@@ -64,4 +42,75 @@ class MainPage extends StatelessWidget {
       ),
     );
   }
+}
+
+class _BannerWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+
+    return Container(
+      height: 200,
+      margin: const EdgeInsets.all(15),
+      child: Swiper(
+        itemCount: 4,
+        itemBuilder: (BuildContext context,int index){
+          return Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(6),
+                color: Theme.of(context).primaryColor
+            ),
+            child: Text(index.toString()),
+          );
+        },
+        autoplay: true,
+        autoplayDelay: 3000,
+        pagination: SwiperCustomPagination(
+            builder:(BuildContext context, SwiperPluginConfig config){
+              return Container(
+                alignment: Alignment.bottomRight,
+                padding: const EdgeInsets.all(10),
+                child: Row(
+                  textDirection: TextDirection.rtl,
+                  children: <Widget>[
+                    Container(
+                      width: 16,
+                      height: 2,
+                      margin: const EdgeInsets.symmetric(horizontal: 2),
+                      decoration: BoxDecoration(
+                        color: config.activeIndex == 3 ? WColors.color_ff : WColors.color_66,
+                      ),
+                    ),
+                    Container(
+                      width: 16,
+                      height: 2,
+                      margin: const EdgeInsets.symmetric(horizontal: 2),
+                      decoration: BoxDecoration(
+                        color: config.activeIndex == 2 ? WColors.color_ff : WColors.color_66,
+                      ),
+                    ),
+                    Container(
+                      width: 16,
+                      height: 2,
+                      margin: const EdgeInsets.symmetric(horizontal: 2),
+                      decoration: BoxDecoration(
+                        color: config.activeIndex == 1 ? WColors.color_ff : WColors.color_66,
+                      ),
+                    ),
+                    Container(
+                      width: 16,
+                      height: 2,
+                      margin: const EdgeInsets.symmetric(horizontal: 2),
+                      decoration: BoxDecoration(
+                        color: config.activeIndex == 0 ? WColors.color_ff : WColors.color_66,
+                      ),
+                    )
+                  ],
+                ),
+              );
+            }
+        )
+      ),
+    );
+  }
+
 }

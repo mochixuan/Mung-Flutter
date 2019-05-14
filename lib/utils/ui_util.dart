@@ -13,4 +13,9 @@ class UiUtil {
         onPressed: _onPressed
     );
   }
+
+  static double getSafeBottomPadding(BuildContext context) {
+    return MediaQuery.of(context).padding.bottom;
+  }
+
 }

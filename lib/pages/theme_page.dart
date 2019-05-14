@@ -15,7 +15,7 @@ class ThemePage extends StatelessWidget {
 
       appBar: AppBar(
         leading: UiUtil.getIconFontButton(0xeb09,() => Navigator.pop(context)),
-        title: Text("主题",style: TextStyle(color: WColors.white)),
+        title: Text("主题",style: TextStyle(color: WColors.color_ff)),
         centerTitle: true,
       ),
       body: Container(
@@ -53,7 +53,7 @@ class ThemePage extends StatelessWidget {
                     Container(
                       height: 40,
                       alignment: Alignment.center,
-                      color: WColors.white,
+                      color: WColors.color_ff,
                       child: Text(
                         _themeModel['name'],
                         style: TextStyle(
