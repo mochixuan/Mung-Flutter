@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mung_flutter/data/const/constant.dart';
+import 'package:mung_flutter/style/base_style.dart';
 import 'package:mung_flutter/utils/ui_util.dart';
 import 'package:mung_flutter/bloc/theme_bloc.dart';
 import 'package:mung_flutter/style/colors.dart';
@@ -15,7 +16,7 @@ class ThemePage extends StatelessWidget {
 
       appBar: AppBar(
         leading: UiUtil.getIconFontButton(0xeb09,() => Navigator.pop(context)),
-        title: Text("主题",style: TextStyle(color: WColors.color_ff)),
+        title: Text("主题",style: BaseStyle.textStyleWhite(18)),
         centerTitle: true,
       ),
       body: Container(

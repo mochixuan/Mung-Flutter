@@ -3,21 +3,21 @@ class HotModel {
 
   int code;
   String error;
-  int count;
   int start;
   int total;
   List<HotSubjectsModel> subjects;
 
+  HotModel();
+
   HotModel.fromJson(Map<String,dynamic> json){
     code = json['code'];
     error = json['error'];
-    count = json['count'];
     start = json['start'];
     total = json['total'];
 
     dynamic subjectItems = json['subjects'];
     if (subjectItems != null && subjectItems is List) {
-      subjects = []; // 有数据时才初始化
+      subjects = [];
       subjectItems.forEach((subjectModel){
         subjects.add(HotSubjectsModel.fromJson(subjectModel));
       });
@@ -33,18 +33,31 @@ class HotSubjectsModel {
 
   // id
   String id;
-  // 星级
-  int ratingAverage;
-  int ratingMax;
   // 标题
   String title;
+  // 导演的头像
+  String avatarsSmall;
+  // 导演名
+  String directorsName;
+  // 星级
+  double ratingAverage;
   //所有主演
   String castNames;
-
+  // 大图
+  String largeImage;
+  // 多少人看过
+  int collectCount;
 
   HotSubjectsModel.fromJson(Map<String,dynamic> json) {
     if (json != null) {
       id = json['id'];
+      largeImage = json['images']['large'];
+      title = json['title'];
+      avatarsSmall = json['directors'][0]['avatars']['small'];
+      directorsName = json['directors'][0]['name'];
+      castNames = json['casts'].map((item) => item['name']).join(" ");
+      collectCount = json['collect_count'];
+      ratingAverage = json['rating']['average'] + 0.0;
     }
   }
 
