@@ -15,7 +15,7 @@ class ThemePage extends StatelessWidget {
     return Scaffold(
 
       appBar: AppBar(
-        leading: UiUtil.getIconFontButton(0xeb09,() => Navigator.pop(context)),
+        leading: BaseStyle.getIconFontButton(0xeb09,() => Navigator.pop(context)),
         title: Text("主题",style: BaseStyle.textStyleWhite(18)),
         centerTitle: true,
       ),

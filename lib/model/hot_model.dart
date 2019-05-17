@@ -1,6 +1,7 @@
 
 class HotModel {
 
+  int count;
   int code;
   String error;
   int start;
@@ -14,6 +15,7 @@ class HotModel {
     error = json['error'];
     start = json['start'];
     total = json['total'];
+    count = json['count'];
 
     dynamic subjectItems = json['subjects'];
     if (subjectItems != null && subjectItems is List) {

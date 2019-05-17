@@ -88,7 +88,7 @@ class HttpBase {
       result = null; //清空
     }
 
-    _errorAnalysis(result);
+    result = _errorAnalysis(result);
 
     return result;
   }
