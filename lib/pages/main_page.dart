@@ -11,6 +11,7 @@ import 'package:mung_flutter/utils/route_util.dart';
 import 'package:mung_flutter/utils/ui_util.dart';
 import 'package:mung_flutter/widget/loading_footer_widget.dart';
 import 'package:mung_flutter/widget/loading_widget.dart';
+import 'package:mung_flutter/data/const/constant.dart';
 
 // ThemeProvider要独立出来，刷新会产生闪屏
 class MainPage extends StatefulWidget {
@@ -24,7 +25,6 @@ class _MainState extends State<MainPage> {
 
   bool _scrollRefreshing = false;
   int _start = 0;
-  int _total = -1;
   List<HotSubjectsModel> _hotMovieItems = [];
   final double _gridGapWidth = 10;
   LoadingState _loadingState = LoadingState.Loading;
@@ -39,14 +39,13 @@ class _MainState extends State<MainPage> {
       _scrollRefreshing = true;
     });
 
-    HttpMovie.requestMovieHot(_start+1,20)
+    HttpMovie.requestMovieHot(_start+2,20)
         .then((result){
           HotModel hotModel = HotModel.fromJson(result);
           if (hotModel.code == CODE_SUCCESS && hotModel.subjects != null) {
             setState(() {
               _scrollRefreshing = false;
               _start = hotModel.start;
-              _total = hotModel.total;
               _loadingState = hotModel.subjects.length != 20 ? LoadingState.NoMore : LoadingState.Loading;
               _hotMovieItems.addAll(hotModel.subjects);
             });
@@ -116,6 +115,7 @@ class _MainState extends State<MainPage> {
                       SliverToBoxAdapter(
                         child: _BannerWidget(_hotMovieItems.take(4).toList()),
                       ),
+                      _getCateWidget(context),
                       _getGridViewWidget(context, _hotMovieItems.skip(4).toList()),
                       SliverToBoxAdapter(
                           child: LoadingFooterWidget(_loadingState,this._requestData)
@@ -134,6 +134,58 @@ class _MainState extends State<MainPage> {
     ThemeProvider.of(context).dispose();
     _scrollController.dispose();
     super.dispose();
+  }
+
+  SliverToBoxAdapter _getCateWidget(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Container(
+        height: 72,
+        decoration: BoxDecoration(
+          color: Theme.of(context).primaryColor,
+          borderRadius: BorderRadius.circular(6)
+        ),
+        margin: EdgeInsets.symmetric(vertical: _gridGapWidth),
+        child: Row(
+          children: Constant.CateItems.map((item){
+            return Expanded(
+                child: FlatButton(
+                  padding: const EdgeInsets.all(0),
+                  onPressed: (){
+
+                  },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        width: 38,
+                        height: 38,
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [Color(item['colors'][0]),Color(item['colors'][1])],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter
+                            ),
+                            borderRadius: BorderRadius.circular(19)
+                        ),
+                        child: Icon(
+                          IconData(item['icon'],fontFamily: 'iconfont'),
+                          size: 26,
+                          color: WColors.color_ff,
+                        ),
+                      ),
+                      Text(item['title'],style: TextStyle(
+                        fontSize: 14,
+                        color: WColors.color_ff,
+                        fontWeight: FontWeight.bold
+                      ))
+                    ],
+                  ),
+                )
+            );
+          }).toList(),
+        ),
+      ),
+    );
   }
 
   SliverGrid _getGridViewWidget(BuildContext context, List<HotSubjectsModel> _hotItems) {
@@ -225,7 +277,6 @@ class _BannerWidget extends StatelessWidget {
 
     return Container(
       height: 200,
-      margin: const EdgeInsets.only(bottom: 10),
       child: Swiper(
         itemCount: _hotItems.length,
         itemBuilder: (BuildContext context,int index){

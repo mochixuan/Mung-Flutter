@@ -55,8 +55,16 @@ class HotSubjectsModel {
       id = json['id'];
       largeImage = json['images']['large'];
       title = json['title'];
-      avatarsSmall = json['directors'][0]['avatars']['small'];
-      directorsName = json['directors'][0]['name'];
+
+      List<dynamic> directors = json['directors'];
+      if (directors != null && directors.length != 0) {
+        avatarsSmall = json['directors'][0]['avatars']['small'];
+        directorsName = json['directors'][0]['name'];
+      } else {
+        avatarsSmall = "";
+        directorsName = "暂无";
+      }
+
       castNames = json['casts'].map((item) => item['name']).join(" ");
       collectCount = json['collect_count'];
       ratingAverage = json['rating']['average'] + 0.0;

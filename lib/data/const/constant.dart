@@ -51,4 +51,27 @@ class Constant {
     }
   ];
 
+  static const List<Map<String,dynamic>> CateItems = [
+    {
+      "colors": [0xfffe4080,0xffff77a5],
+      "title": "Top250",
+      "icon": 0xe636,
+    },
+    {
+      "colors": [0xfffeaa1a,0xffffd31a],
+      "title": "口碑榜",
+      "icon": 0xe7a7,
+    },
+    {
+      "colors": [0xffb983ff,0xffa35cff],
+      "title": "北美票房榜",
+      "icon": 0xe6ac,
+    },
+    {
+      "colors": [0xff00ceff,0xff0196fe],
+      "title": "新片榜",
+      "icon": 0xe638,
+    }
+  ];
+
 }
