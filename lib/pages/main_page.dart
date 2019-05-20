@@ -4,14 +4,15 @@ import 'package:mung_flutter/bloc/theme_bloc.dart';
 import 'package:mung_flutter/data/net/http_base.dart';
 import 'package:mung_flutter/data/net/http_movie.dart';
 import 'package:mung_flutter/model/hot_model.dart';
+import 'package:mung_flutter/model/loading_state.dart';
 import 'package:mung_flutter/style/base_style.dart';
 import 'package:mung_flutter/style/colors.dart';
 import 'package:mung_flutter/utils/route_util.dart';
 import 'package:mung_flutter/utils/ui_util.dart';
-import 'package:mung_flutter/widget/loading_widget.dart';
-import 'package:mung_flutter/model/loading_state.dart';
 import 'package:mung_flutter/widget/loading_footer_widget.dart';
+import 'package:mung_flutter/widget/loading_widget.dart';
 
+// ThemeProvider要独立出来，刷新会产生闪屏
 class MainPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -79,60 +80,51 @@ class _MainState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-     // 有个时间差，就是执行顺序问题
 
-    ThemeBloc _themeBloc = ThemeBloc();
-    return ThemeProvider(
-        themeBloc: _themeBloc,
-        child: StreamBuilder<int>(
-          stream: _themeBloc.stream,
-          builder: (context,snapshot) {
-            return MaterialApp(
-              debugShowCheckedModeBanner: false,
-              theme: ThemeData(
-                primaryColor: Color(_themeBloc.themeColor), // 主题色
-                backgroundColor: WColors.color_f5,
-              ),
-              home: Builder(
-                builder: (context) {
-                  return Scaffold(
-                    appBar: AppBar(
-                      leading: BaseStyle.getIconFontButton(
-                          0xeaec, () => RouteUtil.routeToThemePage(context)),
-                      title: Text("Mung", style: BaseStyle.textStyleWhite(18),),
-                      centerTitle: true,
-                      actions: <Widget>[ BaseStyle.getIconFontButton(0xeafe, () {
-                          this._requestData();
-                        })
-                      ],
-                    ),
-                    body: _hotMovieItems.length == 0 ?
-                      LoadingWidget(_loadingState,this._requestData):
-                      Padding(
-                          padding: EdgeInsets.only(
-                            left: _gridGapWidth,
-                            right: _gridGapWidth,
-                            top: _gridGapWidth,
-                            bottom: UiUtil.getSafeBottomPadding(context)
-                          ),
-                        child: CustomScrollView(
-                          controller: _scrollController,
-                          slivers: <Widget>[
-                            SliverToBoxAdapter(
-                              child: _BannerWidget(_hotMovieItems.take(4).toList()),
-                            ),
-                            _getGridViewWidget(context, _hotMovieItems.skip(4).toList()),
-                            SliverToBoxAdapter(
-                              child: LoadingFooterWidget(_loadingState,this._requestData)
-                            )
-                          ],
-                        ),
+     // 有个时间差，就是执行顺序问
+    return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primaryColor: Color(ThemeProvider.of(context).themeColor), // 主题色
+          backgroundColor: WColors.color_f5,
+        ),
+        home: Builder(
+            builder: (context) {
+              return Scaffold(
+                appBar: AppBar(
+                  leading: BaseStyle.getIconFontButton(
+                      0xeaec, () => RouteUtil.routeToThemePage(context)),
+                  title: Text("Mung", style: BaseStyle.textStyleWhite(18),),
+                  centerTitle: true,
+                  actions: <Widget>[ BaseStyle.getIconFontButton(0xeafe, () {
+                    this._requestData();
+                  })
+                  ],
+                ),
+                body: _hotMovieItems.length == 0 ?
+                LoadingWidget(_loadingState,this._requestData):
+                Padding(
+                  padding: EdgeInsets.only(
+                      left: _gridGapWidth,
+                      right: _gridGapWidth,
+                      top: _gridGapWidth,
+                      bottom: UiUtil.getSafeBottomPadding(context)
+                  ),
+                  child: CustomScrollView(
+                    controller: _scrollController,
+                    slivers: <Widget>[
+                      SliverToBoxAdapter(
+                        child: _BannerWidget(_hotMovieItems.take(4).toList()),
                       ),
-                  );
-                }
-              )
-            );
-          }
+                      _getGridViewWidget(context, _hotMovieItems.skip(4).toList()),
+                      SliverToBoxAdapter(
+                          child: LoadingFooterWidget(_loadingState,this._requestData)
+                      )
+                    ],
+                  ),
+                ),
+              );
+            }
         )
     );
   }

@@ -29,7 +29,7 @@ class LoadingFooterWidget extends StatelessWidget {
               Visibility(
                 child: Icon(
                   IconData(0xe639,fontFamily: 'iconfont'),
-                  size: 36,
+                  size: 32,
                   color: Theme.of(context).primaryColor,
                 ),
                 visible: _loadingState == LoadingState.Error,
@@ -58,7 +58,7 @@ class LoadingFooterWidget extends StatelessWidget {
         children: <Widget>[
           SpinKitPouringHourglass(
             color: Theme.of(context).primaryColor,
-            size: 36,
+            size: 32,
           ),
           Padding(
             padding: const EdgeInsets.only(left: 18),
