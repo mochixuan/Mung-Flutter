@@ -62,7 +62,7 @@ class HotSubjectsModel {
         directorsName = json['directors'][0]['name'];
       } else {
         avatarsSmall = "";
-        directorsName = "暂无";
+        directorsName = "未知";
       }
 
       castNames = json['casts'].map((item) => item['name']).join(" ");

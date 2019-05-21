@@ -85,7 +85,7 @@ class _MainState extends State<MainPage> {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primaryColor: Color(ThemeProvider.of(context).themeColor), // 主题色
-          backgroundColor: WColors.color_f5,
+          scaffoldBackgroundColor: WColors.color_f5
         ),
         home: Builder(
             builder: (context) {
@@ -95,10 +95,7 @@ class _MainState extends State<MainPage> {
                       0xeaec, () => RouteUtil.routeToThemePage(context)),
                   title: Text("Mung", style: BaseStyle.textStyleWhite(18),),
                   centerTitle: true,
-                  actions: <Widget>[ BaseStyle.getIconFontButton(0xeafe, () {
-                    this._requestData();
-                  })
-                  ],
+                  actions: <Widget>[ BaseStyle.getIconFontButton(0xeafe, () => RouteUtil.routeToSearchPage(context))],
                 ),
                 body: _hotMovieItems.length == 0 ?
                 LoadingWidget(_loadingState,this._requestData):
@@ -151,7 +148,7 @@ class _MainState extends State<MainPage> {
                 child: FlatButton(
                   padding: const EdgeInsets.all(0),
                   onPressed: (){
-
+                    RouteUtil.routeToListPage(context,item['title']);
                   },
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -200,47 +197,52 @@ class _MainState extends State<MainPage> {
       ),
 
       delegate: SliverChildBuilderDelegate((context,index){
-
         HotSubjectsModel model = _hotItems[index];
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(4),
-          child: Stack(
-            children: <Widget>[
-              Positioned(
-                  top: 0,bottom: 0,left: 0,right: 0,
-                  child: Image.network(
-                    model.largeImage,
-                    fit: BoxFit.fill,
+        return FlatButton(
+            padding: const EdgeInsets.all(0),
+            onPressed: (){
+              RouteUtil.routeToDetailPage(context, model.id);
+            },
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(4),
+              child: Stack(
+                children: <Widget>[
+                  Positioned(
+                      top: 0,bottom: 0,left: 0,right: 0,
+                      child: Image.network(
+                        model.largeImage,
+                        fit: BoxFit.fill,
+                      )
+                  ),
+                  Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      height: 40,
+                      child: Container(
+                        color: Theme.of(context).primaryColor,
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                width: itemWidth,
+                                child: Text(
+                                  model.title,
+                                  textAlign: TextAlign.center,
+                                  style: BaseStyle.textStyleWhite(12),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
+                              ),
+                              BaseStyle.starWidgetAndText(model.ratingAverage, 14,true)
+                            ]
+                        ),
+                      )
                   )
+                ],
               ),
-              Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  height: 40,
-                  child: Container(
-                    color: Theme.of(context).primaryColor,
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                            width: itemWidth,
-                            child: Text(
-                              model.title,
-                              textAlign: TextAlign.center,
-                              style: BaseStyle.textStyleWhite(12),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            ),
-                          ),
-                          BaseStyle.starWidget(model.ratingAverage, 14,true)
-                        ]
-                    ),
-                  )
-              )
-            ],
-          ),
+            )
         );
       },childCount: _hotItems.length),
     );
@@ -281,41 +283,47 @@ class _BannerWidget extends StatelessWidget {
         itemCount: _hotItems.length,
         itemBuilder: (BuildContext context,int index){
           HotSubjectsModel _model = _hotItems[index];
-          return Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(6),
-                color: Theme.of(context).primaryColor
-            ),
-            child: Row(
-              children: <Widget>[
-                Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: BaseStyle.clipRRectImg(_model.largeImage, 178*0.68, 178, 4)
+          return FlatButton(
+              padding: const EdgeInsets.all(0),
+              onPressed: (){
+                RouteUtil.routeToDetailPage(context, _model.id);
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    color: Theme.of(context).primaryColor
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      BaseStyle.limitLineText(bannerLeftWidth, _model.title, BaseStyle.textStyleWhite(16), 1),
-                      Row(
+                child: Row(
+                  children: <Widget>[
+                    Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: BaseStyle.clipRRectImg(_model.largeImage, 178*0.68, 178, 4)
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          BaseStyle.clipOvalImg(_model.avatarsSmall, 26),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: BaseStyle.limitLineText(bannerLeftWidth - 36 , _model.directorsName, BaseStyle.textStyleWhite(14),1),
-                          )
+                          BaseStyle.limitLineText(bannerLeftWidth, _model.title, BaseStyle.textStyleWhite(16), 1),
+                          Row(
+                            children: <Widget>[
+                              BaseStyle.clipOvalImg(_model.avatarsSmall, 26),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: BaseStyle.limitLineText(bannerLeftWidth - 36 , _model.directorsName, BaseStyle.textStyleWhite(14),1),
+                              )
+                            ],
+                          ),
+                          BaseStyle.limitLineText(bannerLeftWidth, '主演: '+_model.castNames, BaseStyle.textStyleWhite(14), 2),
+                          BaseStyle.limitLineText(bannerLeftWidth, _model.collectCount.toString()+" 看过" , BaseStyle.textStyleWhite(14), 1),
+                          BaseStyle.starWidgetAndText(_model.ratingAverage, 20)
                         ],
                       ),
-                      BaseStyle.limitLineText(bannerLeftWidth, '主演: '+_model.castNames, BaseStyle.textStyleWhite(14), 2),
-                      BaseStyle.limitLineText(bannerLeftWidth, _model.collectCount.toString()+" 看过" , BaseStyle.textStyleWhite(14), 1),
-                      BaseStyle.starWidget(_model.ratingAverage, 20)
-                    ],
-                  ),
-                )
-              ],
-            ),
+                    )
+                  ],
+                ),
+              )
           );
         },
         autoplay: true,

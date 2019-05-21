@@ -37,6 +37,8 @@ dependencies:
   smooth_star_rating: 1.0.2
   # loading
   flutter_spinkit: "^3.1.0"
+  # zoom image
+  photo_view: ^0.3.3
 
 dev_dependencies:
   flutter_test:

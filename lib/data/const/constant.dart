@@ -74,4 +74,9 @@ class Constant {
     }
   ];
 
+  static const List<String> RecommendItems = [
+    '搞笑','爱情','动作','科技',
+    '记录','动漫','犯罪','战争'
+  ];
+
 }

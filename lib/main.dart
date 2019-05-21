@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mung_flutter/bloc/theme_bloc.dart';
 import 'package:mung_flutter/pages/main_page.dart';
 
-
-
 void main(){
 
  ThemeBloc _themeBloc = ThemeBloc();

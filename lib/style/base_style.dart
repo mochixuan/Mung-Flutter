@@ -47,7 +47,7 @@ class BaseStyle {
   }
 
   // 星级
-  static Widget starWidget(double ratingAverage,double size,[bool isCenter = false]) {
+  static Widget starWidgetAndText(double ratingAverage,double size,[bool isCenter = false]) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: isCenter ? MainAxisAlignment.center : MainAxisAlignment.start,
@@ -68,6 +68,19 @@ class BaseStyle {
       ],
     );
   }
+
+  static Widget starWidget(double ratingAverage,double size) {
+    return SmoothStarRating(
+      allowHalfRating: true,
+      starCount: 5,
+      rating: ratingAverage/2,
+      size: size,
+      color: WColors.color_fc3,
+      borderColor: WColors.color_e6,
+    );
+  }
+
+
 
   // IconFont 按钮统一管理
   static Widget getIconFontButton(iconFontData,_onPressed) {

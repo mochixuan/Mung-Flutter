@@ -37,7 +37,8 @@ class LoadingWidget extends StatelessWidget {
                       style: TextStyle(
                         color: Theme.of(context).primaryColor,
                         fontSize: 18,
-                        fontWeight: FontWeight.bold
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.none
                       )
                   ),
                 )
@@ -63,7 +64,8 @@ class LoadingWidget extends StatelessWidget {
             child: Text("飞速加载中",style: TextStyle(
                 color: Theme.of(context).primaryColor,
                 fontSize: 18,
-                fontWeight: FontWeight.bold
+                fontWeight: FontWeight.bold,
+                decoration: TextDecoration.none
             )),
           )
         ],
